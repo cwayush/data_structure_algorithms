@@ -12,7 +12,7 @@ class Solution:
         return lenn
     
     def lengthOfLIS(self, nums: List[int]) -> int:
-        n=len(nums)
+        n=len(nums) 
         return self.recursion(0,-1,nums,n)
 
 # Approach-1 (Recursion)
