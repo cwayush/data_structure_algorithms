@@ -21,6 +21,8 @@ class Solution:
 # T.C : O(n*days)
 # S.C : O(n) 
 
+##############################################################################################################################################
+
 class Solution:
     def countDays(self, days: int, meetings: List[List[int]]) -> int:
         meetings.sort()
@@ -42,6 +44,8 @@ class Solution:
 # Approach-1 (Queue Method)
 # T.C : O(n*log(n))
 # S.C : O(n) 
+
+##############################################################################################################################################
 
 class Solution:
     def countDays(self, days: int, meetings: List[List[int]]) -> int:
