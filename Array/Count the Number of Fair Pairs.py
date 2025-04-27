@@ -14,6 +14,10 @@ class Solution:
 
         return count
     
+# Approach-1 (Space_Optimal)
+# T.C : O(n*log(n))
+# S.C : O(1)
+    
 sol=Solution()
 
 nums = [0,1,7,4,4,5]
