@@ -19,7 +19,7 @@ class Solution:
 
         return maxpro
     
-# Approach-1 (Array_)
+# Approach-1 (Array)
 # T.C : O(n)
 # S.C : O(1) 
 
