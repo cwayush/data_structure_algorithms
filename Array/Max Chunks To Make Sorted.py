@@ -11,7 +11,7 @@ class Solution:
                 prefix[i]=arr[i]
             else:
                 prefix[i]=prefix[i-1]
-
+                
         suffix=[None]*n
         suffix[n-1]=arr[n-1]
         for i in range(n-2,-1,-1):
