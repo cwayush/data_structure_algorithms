@@ -55,43 +55,40 @@ def create_pie_chart(counts):
     total = sum(values)
 
     colors = [
-        "#58A6FF",  # blue
-        "#3FB950",  # green
-        "#F85149",  # red
-        "#D2A8FF",  # purple
-        "#FFA657",  # orange
-        "#79C0FF",  # light blue
-        "#56D364",  # emerald
-        "#FF7B72",  # coral
-        "#B392F0",  # violet
-        "#F2CC60",  # gold
-        "#7EE787",  # mint
-        "#A5D6FF"   # sky
+        "#58A6FF",  # Light Blue
+        "#3FB950",  # Green
+        "#F85149",  # Red
+        "#D2A8FF",  # Light Purple
+        "#FFA657",  # Orange
+        "#F2CC60",  # Yellow
+        "#FF69B4",  # Hot Pink
+        "#00CED1",  # Dark Turquoise (Cyan)
+        "#8B4513",  # Saddle Brown
+        "#9ACD32",  # YellowGreen
+        "#BA55D3",  # Medium Orchid (Magenta-ish)
+        "#FF4500"   # Orange Red
     ][:len(values)]
 
-    # Highlight most attempted
-    explode = [0] * len(values)
-    explode[values.index(max(values))] = 0.06
-
     def autopct_format(pct):
-        return f"{pct:.1f}%" if pct > 4 else ""
+        return f"{pct:.1f}%" if pct >= 4.5 else ""
+
+    outside_labels = [f"{(v/sum(values)*100):.1f}%" if (v/sum(values)*100) < 4.5 else "" for v in values]
 
     wedges, texts, autotexts = ax.pie(
         values,
+        labels=outside_labels,
         autopct=autopct_format,
         startangle=140,
         colors=colors,
-        explode=explode,
         radius=0.9,   
-        wedgeprops=dict(edgecolor=bg_color, linewidth=1.2),
-        pctdistance=0.7
+        wedgeprops=dict(linewidth=0),
+        pctdistance=0.7,
+        rotatelabels=True,
+        labeldistance=1.05
     )
 
-    # Style percentages
-    for autotext in autotexts:
-        autotext.set_color("black")
-        autotext.set_fontsize(10)
-        autotext.set_fontweight("bold")
+    plt.setp(texts, size=9, weight="bold", color=text_color)
+    plt.setp(autotexts, size=10, weight="bold", color="black")
 
     # Legend labels with count
     legend_labels = [
@@ -104,8 +101,8 @@ def create_pie_chart(counts):
         legend_labels,
         title="Categories",
         loc="center left",
-        bbox_to_anchor=(1.02, 0.5),
-        frameon=False,
+        bbox_to_anchor=(0.95, 0.5),
+        frameon=True,
         fontsize=10,
         title_fontsize=12
     )
@@ -135,63 +132,6 @@ def create_pie_chart(counts):
 
     plt.close(fig)
 
-    os.makedirs(CHARTS_DIR, exist_ok=True)
-    
-    plt.style.use('dark_background')
-    text_color = '#E0E0E0'
-    bg_color = '#0D1117' 
-    plt.rcParams["font.family"] = "DejaVu Sans"
-    plt.rcParams.update({
-        'figure.facecolor': bg_color,
-        'axes.facecolor': bg_color,
-        'axes.edgecolor': bg_color,
-        'text.color': text_color,
-    })
-
-    fig, ax = plt.subplots(figsize=(9, 7))
-
-    pie_data = {k: v for k, v in counts.items() if v > 0}
-    values = list(pie_data.values())
-    pie_labels = list(pie_data.keys())
-
-    colors = [
-        "#58A6FF", "#3FB950", "#F85149", "#D2A8FF",
-        "#FFA657", "#A5D6FF", "#56D364", "#FF7B72",
-        "#B392F0", "#F2CC60", "#7EE787", "#79C0FF"
-    ][:len(values)]
-
-    def my_autopct(pct):
-        return ('%1.1f%%' % pct) if pct >= 4.5 else ''
-
-    outside_labels = [('%1.1f%%' % (v/sum(values)*100)) if (v/sum(values)*100) < 4.5 else '' for v in values]
-
-    wedges, texts, autotexts = ax.pie(
-        values,
-        labels=outside_labels,
-        autopct=my_autopct,
-        startangle=140,
-        colors=colors,
-        rotatelabels=True,
-        labeldistance=1.05,
-        wedgeprops=dict(edgecolor=bg_color)
-    )
-
-    plt.setp(texts, size=9, weight="bold", color=text_color)
-    plt.setp(autotexts, size=10, weight="bold", color="black")
-
-    ax.legend(
-        wedges,
-        pie_labels,
-        title="Categories",
-        loc="center left",
-        bbox_to_anchor=(1, 0.5)
-    )
-
-    ax.set_title("Category Distribution", pad=20, fontsize=14, fontweight="bold", color=text_color)
-
-    plt.tight_layout()
-    plt.savefig(os.path.join(CHARTS_DIR, 'category_pie.svg'), format='svg', facecolor=fig.get_facecolor(), transparent=False)
-    plt.close(fig)
 
 def update_readme():
     counts = get_category_counts()
