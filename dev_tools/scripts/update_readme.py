@@ -7,16 +7,26 @@ IGNORE_DIRS = {".git", ".github", "dev_tools", ".venv"}
 
 def get_category_counts():
     category_counts = {}
-    for item in sorted(os.listdir('.')):
-        if os.path.isdir(item) and item not in IGNORE_DIRS and not item.startswith('.'):
-            count = 0
-            for root, _, files in os.walk(item):
-                for f in files:
-                    if os.path.splitext(f)[1] in EXTENSIONS:
-                        count += 1
-            if count > 0:
-                display_name = item.replace('_', ' ')
-                category_counts[display_name] = count
+
+    for category in sorted(os.listdir('.')):
+        if not os.path.isdir(category):
+            continue
+        if category in IGNORE_DIRS or category.startswith('.'):
+            continue
+
+        total_files = 0
+
+        for root, dirs, files in os.walk(category):
+            dirs[:] = [d for d in dirs if d not in IGNORE_DIRS and not d.startswith('.')]
+
+            for file in files:
+                if os.path.splitext(file)[1] in EXTENSIONS:
+                    total_files += 1
+
+        if total_files > 0:
+            display_name = category.replace('_', ' ')
+            category_counts[display_name] = total_files
+
     return category_counts
 
 def create_pie_chart(counts):
