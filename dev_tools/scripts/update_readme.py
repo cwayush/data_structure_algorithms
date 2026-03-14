@@ -31,6 +31,111 @@ def get_category_counts():
 
 def create_pie_chart(counts):
     os.makedirs(CHARTS_DIR, exist_ok=True)
+
+    plt.style.use('dark_background')
+
+    text_color = '#E6EDF3'
+    bg_color = '#0D1117'
+
+    plt.rcParams["font.family"] = "DejaVu Sans"
+    plt.rcParams.update({
+        'figure.facecolor': bg_color,
+        'axes.facecolor': bg_color,
+        'axes.edgecolor': bg_color,
+        'text.color': text_color,
+    })
+
+    fig, ax = plt.subplots(figsize=(10, 7))
+
+    pie_data = {k: v for k, v in counts.items() if v > 0}
+
+    labels = list(pie_data.keys())
+    values = list(pie_data.values())
+
+    total = sum(values)
+
+    colors = [
+        "#58A6FF",  # blue
+        "#3FB950",  # green
+        "#F85149",  # red
+        "#D2A8FF",  # purple
+        "#FFA657",  # orange
+        "#79C0FF",  # light blue
+        "#56D364",  # emerald
+        "#FF7B72",  # coral
+        "#B392F0",  # violet
+        "#F2CC60",  # gold
+        "#7EE787",  # mint
+        "#A5D6FF"   # sky
+    ][:len(values)]
+
+    # Highlight most attempted
+    explode = [0] * len(values)
+    explode[values.index(max(values))] = 0.06
+
+    def autopct_format(pct):
+        return f"{pct:.1f}%" if pct > 4 else ""
+
+    wedges, texts, autotexts = ax.pie(
+        values,
+        autopct=autopct_format,
+        startangle=140,
+        colors=colors,
+        explode=explode,
+        radius=0.9,   
+        wedgeprops=dict(edgecolor=bg_color, linewidth=1.2),
+        pctdistance=0.7
+    )
+
+    # Style percentages
+    for autotext in autotexts:
+        autotext.set_color("black")
+        autotext.set_fontsize(10)
+        autotext.set_fontweight("bold")
+
+    # Legend labels with count
+    legend_labels = [
+        f"[{values[i]}] {labels[i]}"
+        for i in range(len(labels))
+    ]
+
+    legend = ax.legend(
+        wedges,
+        legend_labels,
+        title="Categories",
+        loc="center left",
+        bbox_to_anchor=(1.02, 0.5),
+        frameon=False,
+        fontsize=10,
+        title_fontsize=12
+    )
+
+    # Make legend text italic
+    for text in legend.get_texts():
+        text.set_style('italic')
+
+    legend.get_title().set_fontweight("bold")
+
+    ax.set_title(
+        "Category Distribution",
+        pad=20,
+        fontsize=15,
+        fontweight="bold",
+        color=text_color
+    )
+
+    plt.tight_layout()
+
+    plt.savefig(
+        os.path.join(CHARTS_DIR, 'category_pie.svg'),
+        format='svg',
+        facecolor=fig.get_facecolor(),
+        transparent=False
+    )
+
+    plt.close(fig)
+
+    os.makedirs(CHARTS_DIR, exist_ok=True)
     
     plt.style.use('dark_background')
     text_color = '#E0E0E0'
