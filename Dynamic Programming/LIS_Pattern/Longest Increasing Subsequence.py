@@ -45,6 +45,29 @@ class Solution:
 
 ##############################################################################################################################################
 
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        dp = [[0]*(n+1) for _ in range(n+1)]
+
+        for i in range(n-1, -1, -1):
+            for prev in range(i-1, -2, -1):
+                
+                notTake = dp[i+1][prev+1]
+
+                take = 0
+                if prev == -1 or nums[i] > nums[prev]:
+                    take = 1 + dp[i+1][i+1]
+
+                dp[i][prev+1] = max(take, notTake)
+
+        return dp[0][0]
+
+# Approach-3 (Bottom UP)
+# T.C : O(n^2)
+# S.C : O(n^2)    
+
 sol=Solution()
 
 nums = [10,9,2,5,3,7,101,18]
