@@ -21,7 +21,7 @@ class Solution:
     
 # Approach-1 (Recursion)
 # T.C : Exponential
-# S.C : Exponential
+# S.C : Auxillary Stack Space
 
 ##############################################################################################################################################
 
