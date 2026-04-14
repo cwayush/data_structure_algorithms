@@ -1,4 +1,27 @@
 class Solution:
+    def solve(self,idx,j,arr):
+        if idx==j:
+            return 0
+        
+        mini=float('inf')
+        for k in range(idx,j):
+            operation = arr[idx-1]*arr[k]*arr[j] + self.solve(idx,k,arr) + self.solve(k+1,j,arr)
+            
+            mini= min(mini,operation)
+            
+        return mini
+        
+    def matrixMultiplication(self, arr):
+        n=len(arr)
+        return self.solve(1,n-1,arr)
+
+# Approach-1 (Recusive)
+# T.C : O(2^n)
+# S.C : Auxillary Stack Space
+
+##############################################################################################################################################
+
+class Solution:
     def solve(self,idx,j,arr,dp):
         if idx==j:
             return 0
@@ -21,7 +44,7 @@ class Solution:
         dp=[[-1]*n for _ in range(n)]
         return self.solve(1,n-1,arr,dp)
 
-# Approach-1 (Memoization)
+# Approach-2 (Memoization/Top Down)
 # T.C : O(n^2)
 # S.C : O(n^2) + Auxillary Stack Space
 
@@ -47,7 +70,7 @@ class Solution:
                 
         return dp[1][n-1]
 
-# Approach-2 (Tabulation)
+# Approach-3 (Tabulation/Bottom Up)
 # T.C : O(n^2)
 # S.C : O(n^2)
 
