@@ -1,6 +1,31 @@
 from typing import List
 
 class Solution:
+    def solve(self,i,j,cuts):
+        if i>j:
+            return 0
+
+        mini = float('inf')
+        for idx in range(i,j+1):
+            cost = cuts[j+1] - cuts[i-1] + self.solve(i,idx-1,cuts) + self.solve(idx+1,j,cuts)
+
+            mini= min(mini,cost)
+        return mini
+
+    def minCost(self, n: int, cuts: List[int]) -> int: 
+        c= len(cuts)
+        cuts.insert(0,0)
+        cuts.append(n)
+        cuts.sort()
+        return self.solve(1,c,cuts)
+    
+# Approach-1 (Recusive)
+# T.C : O(2^n)
+# S.C : Auxillary Stack Space
+
+##############################################################################################################################################
+
+class Solution:
     def solve(self,i,j,cuts,dp):
         if i>j:
             return 0
@@ -24,7 +49,7 @@ class Solution:
         cuts.sort()
         return self.solve(1,c,cuts,dp)
     
-# Approach-1 (Memoization)
+# Approach-2 (Memoization)
 # T.C : O(c^2)
 # S.C : O(c^2) + Auxillary Stack Space
 
@@ -50,11 +75,9 @@ class Solution:
 
         return dp[1][c]
     
-# Approach-2 (Tabulation)
+# Approach-3 (Tabulation)
 # T.C : O(c^2)
 # S.C : O(c^2) 
-
-##############################################################################################################################################
 
 sol=Solution()
 
